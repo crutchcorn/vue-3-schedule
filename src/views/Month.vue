@@ -2,9 +2,10 @@
   <div class="container">
     <div class="month">
       <div class="dayBox" v-for="(day, i) in daysToDisplay" :key="i">
-        <div v-if="day" class="day" :class="{currentDay: currentDay === day}">{{day}}</div>
+        <button @click="openDay(day)" v-if="day" class="day" :class="{currentDay: currentDay === day}">{{day}}</button>
       </div>
     </div>
+    <router-view />
   </div>
 </template>
 
@@ -18,6 +19,14 @@ export default {
       days: 6 * 7, // 6 weeks, 7 days
       date: new Date(),
     };
+  },
+  methods: {
+    openDay(date) {
+      const mm = this.date.getMonth();
+      const yy = this.date.getFullYear();
+      const dd = date;
+      this.$router.push(`${mm}-${dd}-${yy}`);
+    },
   },
   computed: {
     currentDay() {
@@ -47,6 +56,7 @@ export default {
 <style scoped>
 .container {
   display: flex;
+  flex-direction: row;
 }
 .month {
   border: 4px solid red;
@@ -55,8 +65,6 @@ export default {
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
   max-width: 600px;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .dayBox {
@@ -76,6 +84,13 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.day {
+  background: none;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .currentDay {
