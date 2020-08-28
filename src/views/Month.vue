@@ -2,7 +2,12 @@
   <div class="container">
     <div class="month">
       <div class="dayBox" v-for="(day, i) in daysToDisplay" :key="i">
-        <button @click="openDay(day)" v-if="day" class="day" :class="{currentDay: currentDay === day}">{{day}}</button>
+        <button
+          @click="openDay(day)"
+          v-if="day"
+          class="day"
+          :class="{currentDay: currentDay === day, selectedDay: day === selectedDay}"
+        >{{day}}</button>
       </div>
     </div>
     <router-view />
@@ -10,10 +15,16 @@
 </template>
 
 <script>
+import { getCurrentDate } from "@/compositions/currentDate";
+
 import { daysInMonth } from "../utils/date";
 
 export default {
   name: "Month",
+  setup() {
+    const { d } = getCurrentDate();
+    return { selectedDay: d };
+  },
   data() {
     return {
       days: 6 * 7, // 6 weeks, 7 days
@@ -99,5 +110,9 @@ export default {
 
 .day:hover {
   background: lightblue;
+}
+
+.selectedDay {
+  background: lightgreen;
 }
 </style>

@@ -1,19 +1,17 @@
 <template>
-  <p>Hello, world! {{currentRouteName}}</p>
+  <p>Hello, world! {{dateToString}}</p>
 </template>
 
 <script>
+import { getCurrentDate } from "@/compositions/currentDate";
+
 export default {
   name: "Schedule",
-  computed: {
-    currentRouteName() {
-      const mmddyy = this.$router.currentRoute.value.params.mmddyy;
-      const [m, d, y] = mmddyy.split("-") || [];
-      return new Date(y, m, d);
-    },
-    dateToString() {
-      return this.currentRouteName.toDateString();
-    }
+  setup() {
+    const { dateToString } = getCurrentDate();
+    return {
+      dateToString,
+    };
   },
 };
 </script>
