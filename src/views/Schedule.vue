@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import { getCurrentDate } from "@/compositions/currentDate";
+import { getRouteDate } from "@/compositions/routeDate";
 
 export default {
   name: "Schedule",
   setup() {
-    const { dateToString } = getCurrentDate();
+    const { dateToString } = getRouteDate();
     return {
       dateToString,
     };

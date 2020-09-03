@@ -2,7 +2,7 @@ import router from "@/router";
 
 import { computed } from "vue";
 
-export function getCurrentDate() {
+export function getRouteDate() {
   const params = computed(() => router.currentRoute.value.params);
 
   const selectedDate = computed(() => {
