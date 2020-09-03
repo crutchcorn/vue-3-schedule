@@ -1,24 +1,38 @@
 <template>
   <div class="container">
-    <Month :currentMonth="currentMonth"/>
+    <div class="beegContain">
+      <div class="monthControllers">
+        <button @click="subMonth()">Up</button>
+        <button @click="addMonth()">Down</button>
+      </div>
+      <Month :currentMonth="currentMonth" />
+    </div>
     <router-view />
   </div>
 </template>
 
 <script>
-import Month from '../components/Month.vue'
+import Month from "../components/Month.vue";
 import dayjs from "dayjs";
 
 export default {
   name: "MonthView",
   components: {
-    Month
+    Month,
   },
   data() {
     return {
       currentMonth: dayjs().date(1),
     };
   },
+  methods: {
+    subMonth() {
+      this.currentMonth = this.currentMonth.subtract(1, 'month');
+    },
+    addMonth() {
+      this.currentMonth = this.currentMonth.add(1, 'month');
+    }
+  }
 };
 </script>
 
@@ -29,50 +43,13 @@ export default {
   display: flex;
   flex-direction: row;
 }
-.month {
-  border: 4px solid red;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
-  max-width: 600px;
-  width: 100%;
+
+.monthControllers {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.dayBox {
-  border: 2px solid black;
-  position: relative;
-}
-
-.dayBox:before {
-  display: block;
-  content: "";
-  width: 100%;
-  padding-top: 100%;
-}
-.dayBox > .day {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.day {
-  background: none;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.currentDay {
-  border: 4px solid blue;
-}
-
-.day:hover {
-  background: lightblue;
-}
-
-.selectedDay {
-  background: lightgreen;
+.beegContain {
+  flex-basis: 100%;
 }
 </style>
