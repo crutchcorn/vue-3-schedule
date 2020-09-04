@@ -5,7 +5,7 @@
         @click="openDay(day)"
         v-if="day"
         class="day"
-        :class="{currentDay: currentDay === day, selectedDay: day === selectedDay}"
+        :class="{currentDay: sameMonthAsToday && currentDay === day, selectedDay: day === selectedDay}"
       >{{day}}</button>
     </div>
   </div>
@@ -18,7 +18,7 @@ import { daysInMonth } from "../utils/date";
 
 export default {
   name: "Month",
-  props: ['currentMonth'],
+  props: ["currentMonth"],
   setup() {
     const { d } = getRouteDate();
     return { selectedDay: d };
@@ -38,6 +38,12 @@ export default {
     },
   },
   computed: {
+    sameMonthAsToday() {
+      return (
+        this.currentMonth.year() === this.todaysDate.getFullYear() &&
+        this.currentMonth.month() === this.todaysDate.getMonth()
+      );
+    },
     currentDay() {
       return this.todaysDate.getDate();
     },
