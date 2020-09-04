@@ -5,7 +5,7 @@
         @click="openDay(day)"
         v-if="day"
         class="day"
-        :class="{currentDay: sameMonthAsToday && currentDay === day, selectedDay: day === selectedDay}"
+        :class="{currentDay: sameMonthAsToday && currentDay === day, selectedDay: sameMonthAsSelected && day === selectedDay}"
       >{{day}}</button>
     </div>
   </div>
@@ -20,8 +20,8 @@ export default {
   name: "Month",
   props: ["currentMonth"],
   setup() {
-    const { d } = getRouteDate();
-    return { selectedDay: d };
+    const { d, selectedDate } = getRouteDate();
+    return { selectedDay: d, selectedDate };
   },
   data() {
     return {
@@ -31,8 +31,8 @@ export default {
   },
   methods: {
     openDay(date) {
-      const mm = this.todaysDate.getMonth();
-      const yy = this.todaysDate.getFullYear();
+      const mm = this.currentMonth.month();
+      const yy = this.currentMonth.year();
       const dd = date;
       this.$router.push(`${mm}-${dd}-${yy}`);
     },
@@ -42,6 +42,13 @@ export default {
       return (
         this.currentMonth.year() === this.todaysDate.getFullYear() &&
         this.currentMonth.month() === this.todaysDate.getMonth()
+      );
+    },
+    sameMonthAsSelected() {
+      if (!this.selectedDate) return false;
+      return (
+        this.currentMonth.year() === this.selectedDate.getFullYear() &&
+        this.currentMonth.month() === this.selectedDate.getMonth()
       );
     },
     currentDay() {
