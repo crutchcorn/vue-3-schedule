@@ -1,5 +1,12 @@
 <template>
   <div class="month">
+    <div class="dayName">Sun</div>
+    <div class="dayName">Mon</div>
+    <div class="dayName">Tue</div>
+    <div class="dayName">Wed</div>
+    <div class="dayName">Thurs</div>
+    <div class="dayName">Fri</div>
+    <div class="dayName">Sat</div>
     <div class="dayBox" v-for="(day, i) in daysToDisplay" :key="i">
       <button
         @click="openDay(day)"
@@ -75,12 +82,15 @@ export default {
 
 <style scoped>
 .month {
-  border: 4px solid red;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto repeat(6, 1fr);
   max-width: 600px;
   width: 100%;
+}
+
+.dayName {
+  margin-bottom: 1rem;
 }
 
 .dayBox {
