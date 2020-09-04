@@ -1,15 +1,30 @@
 <template>
   <div>
     <p>{{dateToString}}</p>
+    <ul>
+      <li v-for="(event, i) in eventsArr" :key="i">
+        {{event}}
+      </li>
+    </ul>
     <button @click="modalOpen = true">Add Event</button>
   </div>
 
-  <ScheduleCreateDialog :modalOpen="modalOpen" :selectedDate="selectedDate" @close="modalOpen = false" />
+  <ScheduleCreateDialog :modalOpen="modalOpen" :selectedDate="selectedDate" @close="closeDialog()" />
 </template>
 
 <script>
 import { getRouteDate } from "@/compositions/routeDate";
 import ScheduleCreateDialog from '@/components/ScheduleCreateDialog';
+import { watchEffect, ref } from "vue";
+
+const getDateInfo = d => {
+  const dayKey = `${d.getDate()}-${d.getMonth()}-${d.getFullYear()}`;
+  const oldJSON = localStorage.getItem(dayKey)
+  if (!oldJSON) {
+    return []
+  }
+  return JSON.parse(oldJSON);
+}
 
 export default {
   name: "Schedule",
@@ -18,9 +33,22 @@ export default {
   },
   setup() {
     const { dateToString, selectedDate } = getRouteDate();
+
+    const eventsArr = ref([])
+
+    watchEffect(() => {
+      if (!selectedDate.value) {
+        eventsArr.value = [];
+        return;
+      }
+      const d = selectedDate.value;
+      eventsArr.value = getDateInfo(d);
+    })
+
     return {
       dateToString,
       selectedDate,
+      eventsArr
     };
   },
   data() {
@@ -28,6 +56,13 @@ export default {
       modalOpen: false,
     };
   },
+  methods: {
+    closeDialog() {
+      this.modalOpen = false;
+      const newArr = getDateInfo(this.selectedDate);
+      this.eventsArr.value = newArr;
+    }
+  }
 };
 </script>
 
