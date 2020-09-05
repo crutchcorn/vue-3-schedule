@@ -48,6 +48,8 @@
             v-if="day.toUse"
             class="day"
             :data-daynum="day.number"
+            :data-dayofweek="dayI"
+            :data-week="weekI"
             :class="{currentDay: isCurrDay, selectedDay: isSelected}"
         >
           <span class="screen-reader-text">{{ day.label }}</span>
@@ -123,10 +125,20 @@ export default {
           this.$emit('downmonth')
           break;
         }
-        // TODO: Add "home" and "end" support
-        // @see https://www.w3.org/TR/wai-aria-practices-1.1/examples/dialog-modal/datepicker-dialog.html
-        case 'Home':
-        case 'End':
+        case 'Home': {
+          const weekNum = currEl.dataset.week
+          const newEl = document.querySelector(`[data-week="${weekNum}"][data-dayofweek="0"]`);
+          if (!newEl) return;
+          newEl.focus();
+          return;
+        }
+        case 'End': {
+          const weekNum = currEl.dataset.week
+          const newEl = document.querySelector(`[data-week="${weekNum}"][data-dayofweek="6"]`);
+          if (!newEl) return;
+          newEl.focus();
+          return;
+       }
         default:
           return;
       }
