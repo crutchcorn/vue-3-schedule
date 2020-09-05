@@ -62,7 +62,7 @@ export default {
       return this.todaysDate.getDate();
     },
     startDayOfWeek() {
-      return this.currentMonth.get("day") + 1; // `in` starts at index of 1
+      return this.currentMonth.get("day") - 1; // Indexes at 1
     },
     daysToDisplay() {
       const lastDateNum = daysInMonth(
