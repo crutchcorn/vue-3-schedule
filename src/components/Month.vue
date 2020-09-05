@@ -39,14 +39,16 @@
           class="dayBox"
           :class="{hasBorder: day.toUse}"
           :isToday="isCurrDay = sameMonthAsToday && currentDay === day.number"
+          :isSelected="isSelected = sameMonthAsSelected && day.number === selectedDay"
           :aria-hidden="!day.toUse"
+          :aria-selected="isSelected"
           v-bind="isCurrDay ? {'aria-current': 'date'} : {}">
         <button
             @click="openDay(day.number)"
             v-if="day.toUse"
             class="day"
             :data-daynum="day.number"
-            :class="{currentDay: isCurrDay, selectedDay: sameMonthAsSelected && day.number === selectedDay}"
+            :class="{currentDay: isCurrDay, selectedDay: isSelected}"
         >
           <span class="screen-reader-text">{{ day.label }}</span>
           <span aria-hidden="true">{{ day.number }}</span>
@@ -65,6 +67,7 @@ import {daysInMonth} from "@/utils/date";
 export default {
   name: "Month",
   props: ["currentMonth"],
+  emits: ['upmonth', 'downmonth', 'upyear', 'downyear'],
   setup() {
     const {d, selectedDate} = getRouteDate();
     return {selectedDay: d, selectedDate};
@@ -86,7 +89,7 @@ export default {
       const currEl = document.activeElement;
       const dayNum = currEl.dataset.daynum;
       if (!dayNum) return;
-      let offset;
+      let offset = 0;
       switch (event.code) {
         case 'ArrowUp': {
           offset = -7;
@@ -104,12 +107,35 @@ export default {
           offset = 1;
           break;
         }
+        case 'PageUp': {
+          if (event.shiftKey) {
+            this.$emit('upyear')
+            break;
+          }
+          this.$emit('upmonth')
+          break;
+        }
+        case 'PageDown': {
+          if (event.shiftKey) {
+            this.$emit('downyear')
+            break;
+          }
+          this.$emit('downmonth')
+          break;
+        }
+        // TODO: Add "home" and "end" support
+        // @see https://www.w3.org/TR/wai-aria-practices-1.1/examples/dialog-modal/datepicker-dialog.html
+        case 'Home':
+        case 'End':
         default:
           return;
       }
-      const newEl = document.querySelector(`[data-daynum="${Number(dayNum) + offset}"]`)
-      if (!newEl) return;
-      newEl.focus();
+      // Allow time for new month or new year to render
+      this.$nextTick(() => {
+        const newEl = document.querySelector(`[data-daynum="${Number(dayNum) + offset}"]`)
+        if (!newEl) return;
+        newEl.focus();
+      });
     },
   },
   computed: {

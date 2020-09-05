@@ -1,5 +1,5 @@
 <template>
-  <h1>{{displayMonth}}</h1>
+  <h1>{{ displayMonth }}</h1>
   <div class="container">
     <div class="beegContain">
       <div class="monthControllers">
@@ -7,9 +7,15 @@
         <button @click="subMonth()">Up</button>
         <button @click="addMonth()">Down</button>
       </div>
-      <Month :currentMonth="currentMonth" />
+      <Month
+          :currentMonth="currentMonth"
+          @upmonth="addMonth()"
+          @downmonth="subMonth()"
+          @upyear="addYear()"
+          @downyear="subYear()"
+      />
     </div>
-    <router-view />
+    <router-view/>
   </div>
 </template>
 
@@ -42,6 +48,12 @@ export default {
     },
     addMonth() {
       this.currentMonth = this.currentMonth.add(1, 'month');
+    },
+    subYear() {
+      this.currentMonth = this.currentMonth.subtract(1, 'year');
+    },
+    addYear() {
+      this.currentMonth = this.currentMonth.add(1, 'year');
     }
   }
 };
