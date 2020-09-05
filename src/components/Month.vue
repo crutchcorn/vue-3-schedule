@@ -1,21 +1,27 @@
 <template>
-  <div class="month">
-    <div class="dayName">Sun</div>
-    <div class="dayName">Mon</div>
-    <div class="dayName">Tue</div>
-    <div class="dayName">Wed</div>
-    <div class="dayName">Thurs</div>
-    <div class="dayName">Fri</div>
-    <div class="dayName">Sat</div>
-    <div class="dayBox" v-for="(day, i) in daysToDisplay" :key="i">
+  <table class="month">
+    <thead>
+    <tr>
+    <th class="dayName">Sun</th>
+    <th class="dayName">Mon</th>
+    <th class="dayName">Tue</th>
+    <th class="dayName">Wed</th>
+    <th class="dayName">Thurs</th>
+    <th class="dayName">Fri</th>
+    <th class="dayName">Sat</th>
+    </tr>
+    </thead>
+    <tr v-for="(week, weekI) in weekArr" :key="weekI">
+      <td v-for="(day, dayI) in week" :key="dayI" class="dayBox" :class="{hasBorder: !!day}">
       <button
         @click="openDay(day)"
         v-if="day"
         class="day"
         :class="{currentDay: sameMonthAsToday && currentDay === day, selectedDay: sameMonthAsSelected && day === selectedDay}"
       >{{day}}</button>
-    </div>
-  </div>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script>
@@ -32,7 +38,7 @@ export default {
   },
   data() {
     return {
-      daysToShow: 6 * 7, // 6 weeks, 7 days
+      weeksToRender: 6, // 6 weeks, 7 days
       todaysDate: new Date(),
     };
   },
@@ -64,16 +70,21 @@ export default {
     startDayOfWeek() {
       return this.currentMonth.get("day") - 1; // Indexes at 1
     },
-    daysToDisplay() {
+    weekArr() {
       const lastDateNum = daysInMonth(
         this.todaysDate.getMonth(),
         this.todaysDate.getFullYear()
       );
-      const daysArr = Array.from({ length: this.daysToShow }, (_, n) => {
-        const dateNum = n - this.startDayOfWeek;
-        if (dateNum <= 0 || dateNum > lastDateNum) return false;
-        return dateNum;
-      });
+
+      const daysArr = Array.from({length: this.weeksToRender}, (_, weekI) => {
+        return Array.from({length: 7}, (_, dayI) => {
+          const dayIndex = (weekI * 7) + dayI;
+          const dateNum = dayIndex - this.startDayOfWeek;
+          console.log(dayIndex);
+          if (dateNum <= 0 || dateNum > lastDateNum) return false;
+          return dateNum;
+        })
+      })
       return daysArr;
     },
   },
@@ -82,9 +93,9 @@ export default {
 
 <style scoped>
 .month {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: auto repeat(6, 1fr);
+  table-layout: fixed;
+  border-spacing: 0;
+  border-collapse: collapse;
   max-width: 600px;
   width: 100%;
 }
@@ -94,8 +105,11 @@ export default {
 }
 
 .dayBox {
-  border: 2px solid black;
   position: relative;
+}
+
+.hasBorder {
+  border: 2px solid black;
 }
 
 .dayBox:before {
