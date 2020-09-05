@@ -17,6 +17,7 @@
 export default {
   name: "ScheduleCreateDialog",
   props: ['modalOpen', 'selectedDate'],
+  emits: ['close'],
   data() {
     return {
       thingDid: '',
