@@ -60,7 +60,7 @@ export default {
     closeDialog() {
       this.modalOpen = false;
       const newArr = getDateInfo(this.selectedDate);
-      this.eventsArr.value = newArr;
+      this.eventsArr = newArr;
     }
   }
 };
