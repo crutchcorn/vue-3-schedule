@@ -2,29 +2,54 @@
   <table class="month">
     <thead>
     <tr>
-    <th class="dayName">Sun</th>
-    <th class="dayName">Mon</th>
-    <th class="dayName">Tue</th>
-    <th class="dayName">Wed</th>
-    <th class="dayName">Thurs</th>
-    <th class="dayName">Fri</th>
-    <th class="dayName">Sat</th>
+      <th class="dayName">
+        <span class="screen-reader-text">Sunday</span>
+        <span aria-hidden="true">Sun</span>
+      </th>
+      <th class="dayName">
+        <span class="screen-reader-text">Monday</span>
+        <span aria-hidden="true">Mon</span>
+      </th>
+      <th class="dayName">
+        <span class="screen-reader-text">Tuesday</span>
+        <span aria-hidden="true">Tue</span>
+      </th>
+      <th class="dayName">
+        <span class="screen-reader-text">Wednesday</span>
+        <span aria-hidden="true">Wed</span>
+      </th>
+      <th class="dayName">
+        <span class="screen-reader-text">Thursday</span>
+        <span aria-hidden="true">Thurs</span>
+      </th>
+      <th class="dayName">
+        <span class="screen-reader-text">Friday</span>
+        <span aria-hidden="true">Fri</span>
+      </th>
+      <th class="dayName">
+        <span class="screen-reader-text">Saturday</span>
+        <span aria-hidden="true">Sat</span>
+      </th>
     </tr>
     </thead>
     <tbody>
     <tr v-for="(week, weekI) in weekArr" :key="weekI">
       <td v-for="(day, dayI) in week"
-          :key="dayI" class="dayBox"
-          :class="{hasBorder: !!day}"
-          :isToday="isCurrDay = sameMonthAsToday && currentDay === day"
-          :aria-hidden="!day"
+          :key="dayI"
+          class="dayBox"
+          :class="{hasBorder: day.toUse}"
+          :isToday="isCurrDay = sameMonthAsToday && currentDay === day.number"
+          :aria-hidden="!day.toUse"
           v-bind="isCurrDay ? {'aria-current': 'date'} : {}">
-      <button
-        @click="openDay(day)"
-        v-if="day"
-        class="day"
-        :class="{currentDay: isCurrDay, selectedDay: sameMonthAsSelected && day === selectedDay}"
-      >{{day}}</button>
+        <button
+            @click="openDay(day.number)"
+            v-if="day.toUse"
+            class="day"
+            :class="{currentDay: isCurrDay, selectedDay: sameMonthAsSelected && day.number === selectedDay}"
+        >
+          <span class="screen-reader-text">{{ day.label }}</span>
+          <span aria-hidden="true">{{ day.number }}</span>
+        </button>
       </td>
     </tr>
     </tbody>
@@ -32,16 +57,16 @@
 </template>
 
 <script>
-import { getRouteDate } from "@/compositions/routeDate";
+import {getRouteDate} from "@/compositions/routeDate";
 
-import { daysInMonth } from "@/utils/date";
+import {daysInMonth} from "@/utils/date";
 
 export default {
   name: "Month",
   props: ["currentMonth"],
   setup() {
-    const { d, selectedDate } = getRouteDate();
-    return { selectedDay: d, selectedDate };
+    const {d, selectedDate} = getRouteDate();
+    return {selectedDay: d, selectedDate};
   },
   data() {
     return {
@@ -60,15 +85,15 @@ export default {
   computed: {
     sameMonthAsToday() {
       return (
-        this.currentMonth.year() === this.todaysDate.getFullYear() &&
-        this.currentMonth.month() === this.todaysDate.getMonth()
+          this.currentMonth.year() === this.todaysDate.getFullYear() &&
+          this.currentMonth.month() === this.todaysDate.getMonth()
       );
     },
     sameMonthAsSelected() {
       if (!this.selectedDate) return false;
       return (
-        this.currentMonth.year() === this.selectedDate.getFullYear() &&
-        this.currentMonth.month() === this.selectedDate.getMonth()
+          this.currentMonth.year() === this.selectedDate.getFullYear() &&
+          this.currentMonth.month() === this.selectedDate.getMonth()
       );
     },
     currentDay() {
@@ -79,17 +104,29 @@ export default {
     },
     weekArr() {
       const lastDateNum = daysInMonth(
-        this.todaysDate.getMonth(),
-        this.todaysDate.getFullYear()
+          this.todaysDate.getMonth(),
+          this.todaysDate.getFullYear()
       );
+
+      const [monthName, year] = this.currentMonth.format('MMMM YYYY').split(' ');
+
+      const getDayStr = day => `${monthName} ${day}, ${year}`;
 
       const daysArr = Array.from({length: this.weeksToRender}, (_, weekI) => {
         return Array.from({length: 7}, (_, dayI) => {
           const dayIndex = (weekI * 7) + dayI;
           const dateNum = dayIndex - this.startDayOfWeek;
-          console.log(dayIndex);
-          if (dateNum <= 0 || dateNum > lastDateNum) return false;
-          return dateNum;
+          if (dateNum <= 0 || dateNum > lastDateNum) return {
+            toUse: false,
+            label: '',
+            number: 0,
+          };
+          const str = getDayStr(dateNum);
+          return {
+            toUse: true,
+            label: str,
+            number: dateNum
+          }
         })
       })
       return daysArr;
@@ -125,6 +162,7 @@ export default {
   width: 100%;
   padding-top: 100%;
 }
+
 .dayBox > .day {
   position: absolute;
   top: 0;
