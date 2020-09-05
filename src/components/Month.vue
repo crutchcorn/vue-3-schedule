@@ -11,23 +11,30 @@
     <th class="dayName">Sat</th>
     </tr>
     </thead>
+    <tbody>
     <tr v-for="(week, weekI) in weekArr" :key="weekI">
-      <td v-for="(day, dayI) in week" :key="dayI" class="dayBox" :class="{hasBorder: !!day}">
+      <td v-for="(day, dayI) in week"
+          :key="dayI" class="dayBox"
+          :class="{hasBorder: !!day}"
+          :isToday="isCurrDay = sameMonthAsToday && currentDay === day"
+          :aria-hidden="!day"
+          v-bind="isCurrDay ? {'aria-current': 'date'} : {}">
       <button
         @click="openDay(day)"
         v-if="day"
         class="day"
-        :class="{currentDay: sameMonthAsToday && currentDay === day, selectedDay: sameMonthAsSelected && day === selectedDay}"
+        :class="{currentDay: isCurrDay, selectedDay: sameMonthAsSelected && day === selectedDay}"
       >{{day}}</button>
       </td>
     </tr>
+    </tbody>
   </table>
 </template>
 
 <script>
 import { getRouteDate } from "@/compositions/routeDate";
 
-import { daysInMonth } from "../utils/date";
+import { daysInMonth } from "@/utils/date";
 
 export default {
   name: "Month",
