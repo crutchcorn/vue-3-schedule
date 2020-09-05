@@ -33,7 +33,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="(week, weekI) in weekArr" :key="weekI">
+    <tr v-for="(week, weekI) in weekArr" :key="weekI" @keydown="arrowKeyHandler($event)">
       <td v-for="(day, dayI) in week"
           :key="dayI"
           class="dayBox"
@@ -45,6 +45,7 @@
             @click="openDay(day.number)"
             v-if="day.toUse"
             class="day"
+            :data-daynum="day.number"
             :class="{currentDay: isCurrDay, selectedDay: sameMonthAsSelected && day.number === selectedDay}"
         >
           <span class="screen-reader-text">{{ day.label }}</span>
@@ -80,6 +81,35 @@ export default {
       const yy = this.currentMonth.year();
       const dd = date;
       this.$router.push(`${mm}-${dd}-${yy}`);
+    },
+    arrowKeyHandler(event) {
+      const currEl = document.activeElement;
+      const dayNum = currEl.dataset.daynum;
+      if (!dayNum) return;
+      let offset;
+      switch (event.code) {
+        case 'ArrowUp': {
+          offset = -7;
+          break;
+        }
+        case 'ArrowDown': {
+          offset = 7;
+          break;
+        }
+        case 'ArrowLeft': {
+          offset = -1;
+          break;
+        }
+        case 'ArrowRight': {
+          offset = 1;
+          break;
+        }
+        default:
+          return;
+      }
+      const newEl = document.querySelector(`[data-daynum="${Number(dayNum) + offset}"]`)
+      if (!newEl) return;
+      newEl.focus();
     },
   },
   computed: {
