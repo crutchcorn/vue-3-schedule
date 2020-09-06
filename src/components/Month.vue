@@ -64,8 +64,6 @@
 <script>
 import {getRouteDate} from "@/compositions/routeDate";
 
-import {daysInMonth} from "@/utils/date";
-
 export default {
   name: "Month",
   props: ["currentMonth"],
@@ -171,10 +169,7 @@ export default {
       return this.currentMonth.get("day") - 1; // Indexes at 1
     },
     weekArr() {
-      const lastDateNum = daysInMonth(
-          this.todaysDate.getMonth(),
-          this.todaysDate.getFullYear()
-      );
+      const lastDateNum = this.currentMonth.daysInMonth()
 
       const [monthName, year] = this.currentMonth.format('MMMM YYYY').split(' ');
 
