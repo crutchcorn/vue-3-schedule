@@ -38,20 +38,20 @@
           v-for="(day, dayI) in week"
           :key="dayI"
           class="dayBox"
-          :class="{hasBorder: day.toUse}"
-          :isToday="isCurrDay = sameMonthAsToday && currentDay === day.number"
-          :isSelected="isSelected = sameMonthAsSelected && day.number === selectedDay"
-          :aria-hidden="!day.toUse"
+          :class="{currMonth: day.currMonth}"
+          :isToday="isCurrDay = day.currMonth && sameMonthAsToday && currentDay === day.number"
+          :isSelected="isSelected = day.currMonth && sameMonthAsSelected && day.number === selectedDay"
+          :aria-hidden="!day.currMonth"
           :aria-selected="isSelected"
           v-bind="isCurrDay ? {'aria-current': 'date'} : {}"
         >
           <button
             @click="openDay(day.number)"
-            v-if="day.toUse"
             class="day"
-            :data-daynum="day.number"
-            :data-dayofweek="dayI"
-            :data-week="weekI"
+            :tabindex="day.currMonth ? 1 : -1"
+            :data-daynum="day.currMonth ? day.number : -1"
+            :data-dayofweek="day.currMonth ? dayI : -1"
+            :data-week="day.currMonth ? weekI : -1"
             :class="{currentDay: isCurrDay, selectedDay: isSelected}"
           >
             <span class="screen-reader-text">{{ day.label }}</span>
@@ -208,7 +208,7 @@ export default {
           if (dateNum <= 0) {
             const newDateNum = dateNum + lastMonthLastDateNum;
             return {
-              toUse: true,
+              currMonth: false,
               label: getPrevStr(newDateNum),
               number: newDateNum,
             };
@@ -216,13 +216,13 @@ export default {
           if (dateNum > lastDateNum) {
             const newDateNum = dateNum - lastDateNum;
             return {
-              toUse: true,
+              currMonth: false,
               label: getNextStr(newDateNum),
               number: newDateNum,
             };
           }
           return {
-            toUse: true,
+            currMonth: true,
             label: getDayStr(dateNum),
             number: dateNum,
           };
@@ -251,7 +251,7 @@ export default {
   position: relative;
 }
 
-.hasBorder {
+.currMonth {
   border: 2px solid black;
 }
 
