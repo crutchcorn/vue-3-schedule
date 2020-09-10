@@ -38,20 +38,20 @@
           v-for="(day, dayI) in week"
           :key="dayI"
           class="dayBox"
-          :class="{currMonth: day.currMonth}"
-          :isToday="isCurrDay = day.currMonth && sameMonthAsToday && currentDay === day.number"
-          :isSelected="isSelected = day.currMonth && sameMonthAsSelected && day.number === selectedDay"
-          :aria-hidden="!day.currMonth"
+          :class="{diffMonth: day.diffMonth}"
+          :isToday="isCurrDay = !day.diffMonth && sameMonthAsToday && currentDay === day.number"
+          :isSelected="isSelected = !day.diffMonth && sameMonthAsSelected && day.number === selectedDay"
+          :aria-hidden="day.diffMonth"
           :aria-selected="isSelected"
           v-bind="isCurrDay ? {'aria-current': 'date'} : {}"
         >
           <button
-            @click="openDay(day.number)"
+            @click="openDay(day.number, day.diffMonth)"
             class="day"
-            :tabindex="day.currMonth ? 1 : -1"
-            :data-daynum="day.currMonth ? day.number : -1"
-            :data-dayofweek="day.currMonth ? dayI : -1"
-            :data-week="day.currMonth ? weekI : -1"
+            :tabindex="!day.diffMonth ? 1 : -1"
+            :data-daynum="!day.diffMonth ? day.number : -1"
+            :data-dayofweek="!day.diffMonth ? dayI : -1"
+            :data-week="!day.diffMonth ? weekI : -1"
             :class="{currentDay: isCurrDay, selectedDay: isSelected}"
           >
             <span class="screen-reader-text">{{ day.label }}</span>
@@ -81,9 +81,24 @@ export default {
     };
   },
   methods: {
-    openDay(date) {
-      const mm = this.currentMonth.month();
-      const yy = this.currentMonth.year();
+    openDay(date, diffMonth) {
+      let thisMonth = this.currentMonth.clone();
+      switch (diffMonth) {
+        case "prev": {
+          thisMonth = thisMonth.subtract(1, 'month');
+          this.$emit('downmonth');
+          break;
+        }
+        case "next": {
+          thisMonth = thisMonth.add(1, 'month');
+          this.$emit('upmonth');
+          break;
+        }
+        default:
+          break;
+      }
+      const mm = thisMonth.month();
+      const yy = thisMonth.year();
       const dd = date;
       this.$router.push(`${mm}-${dd}-${yy}`);
     },
@@ -195,7 +210,6 @@ export default {
         .split(" ");
       const getPrevStr = (day) => `${lastMonthName} ${day}, ${lastMonthYear}`;
 
-
       const [nextMonthName, nextMonthYear] = this.nextMonth
         .format("MMMM YYYY")
         .split(" ");
@@ -208,7 +222,7 @@ export default {
           if (dateNum <= 0) {
             const newDateNum = dateNum + lastMonthLastDateNum;
             return {
-              currMonth: false,
+              diffMonth: "prev",
               label: getPrevStr(newDateNum),
               number: newDateNum,
             };
@@ -216,13 +230,13 @@ export default {
           if (dateNum > lastDateNum) {
             const newDateNum = dateNum - lastDateNum;
             return {
-              currMonth: false,
+              diffMonth: "next",
               label: getNextStr(newDateNum),
               number: newDateNum,
             };
           }
           return {
-            currMonth: true,
+            diffMonth: false,
             label: getDayStr(dateNum),
             number: dateNum,
           };
@@ -251,8 +265,8 @@ export default {
   position: relative;
 }
 
-.currMonth {
-  border: 2px solid black;
+.diffMonth {
+  opacity: 0.4;
 }
 
 .dayBox:before {
