@@ -4,31 +4,31 @@
       <tr>
         <th class="dayName">
           <span class="screen-reader-text">Sunday</span>
-          <span aria-hidden="true">Sun</span>
+          <span aria-hidden="true">S</span>
         </th>
         <th class="dayName">
           <span class="screen-reader-text">Monday</span>
-          <span aria-hidden="true">Mon</span>
+          <span aria-hidden="true">M</span>
         </th>
         <th class="dayName">
           <span class="screen-reader-text">Tuesday</span>
-          <span aria-hidden="true">Tue</span>
+          <span aria-hidden="true">T</span>
         </th>
         <th class="dayName">
           <span class="screen-reader-text">Wednesday</span>
-          <span aria-hidden="true">Wed</span>
+          <span aria-hidden="true">W</span>
         </th>
         <th class="dayName">
           <span class="screen-reader-text">Thursday</span>
-          <span aria-hidden="true">Thurs</span>
+          <span aria-hidden="true">T</span>
         </th>
         <th class="dayName">
           <span class="screen-reader-text">Friday</span>
-          <span aria-hidden="true">Fri</span>
+          <span aria-hidden="true">F</span>
         </th>
         <th class="dayName">
           <span class="screen-reader-text">Saturday</span>
-          <span aria-hidden="true">Sat</span>
+          <span aria-hidden="true">S</span>
         </th>
       </tr>
     </thead>
@@ -85,13 +85,13 @@ export default {
       let thisMonth = this.currentMonth.clone();
       switch (diffMonth) {
         case "prev": {
-          thisMonth = thisMonth.subtract(1, 'month');
-          this.$emit('downmonth');
+          thisMonth = thisMonth.subtract(1, "month");
+          this.$emit("downmonth");
           break;
         }
         case "next": {
-          thisMonth = thisMonth.add(1, 'month');
-          this.$emit('upmonth');
+          thisMonth = thisMonth.add(1, "month");
+          this.$emit("upmonth");
           break;
         }
         default:
@@ -255,9 +255,14 @@ export default {
   border-collapse: collapse;
   max-width: 600px;
   width: 100%;
+  margin: 0 auto;
 }
 
 .dayName {
+  border-bottom: 1px solid rgba(0, 128, 106, 0.32);
+  color: #1f4741;
+  padding-top: 24px;
+  padding-bottom: 24px;
   margin-bottom: 1rem;
 }
 
@@ -266,6 +271,7 @@ export default {
 }
 
 .diffMonth {
+  color: #1F4741;
   opacity: 0.4;
 }
 
@@ -276,30 +282,39 @@ export default {
   padding-top: 100%;
 }
 
-.dayBox > .day {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+.dayBox:not(.diffMonth) > .day {
+  color: #008a73;
 }
 
 .day {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
-  width: 100%;
-  height: 100%;
   border: none;
+  margin: 0 auto;
+  border-radius: 50%;
+
+  height: 100%;
+  width: 100%;
+
+  max-width: 3.5rem;
+  max-height: 3.5rem;
 }
 
 .currentDay {
-  border: 4px solid blue;
+  border: 4px solid #008a73;
 }
 
-.day:hover {
-  background: lightblue;
+.dayBox:hover .day {
+  background: rgba(0, 128, 106, 0.12);
 }
 
-.selectedDay {
-  background: lightgreen;
+.dayBox:not(.diffMonth) > .day.selectedDay {
+  background: #008a73;
+  color: white;
 }
 </style>

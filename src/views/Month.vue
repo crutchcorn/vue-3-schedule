@@ -15,7 +15,9 @@
           @downyear="subYear()"
       />
     </div>
+    <div class="scheduleView">
     <router-view/>
+    </div>
   </div>
 </template>
 
@@ -65,6 +67,9 @@ export default {
 .container {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .monthControllers {
@@ -73,6 +78,13 @@ export default {
 }
 
 .beegContain {
-  flex-basis: 100%;
+  flex-shrink: 1;
+  width: 600px;
+  flex-grow: 1;
+}
+
+.scheduleView {
+  flex-grow: 1;
+  min-width: 300px;
 }
 </style>
