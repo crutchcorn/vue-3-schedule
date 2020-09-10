@@ -1,40 +1,41 @@
 <template>
   <table class="month">
     <thead>
-    <tr>
-      <th class="dayName">
-        <span class="screen-reader-text">Sunday</span>
-        <span aria-hidden="true">Sun</span>
-      </th>
-      <th class="dayName">
-        <span class="screen-reader-text">Monday</span>
-        <span aria-hidden="true">Mon</span>
-      </th>
-      <th class="dayName">
-        <span class="screen-reader-text">Tuesday</span>
-        <span aria-hidden="true">Tue</span>
-      </th>
-      <th class="dayName">
-        <span class="screen-reader-text">Wednesday</span>
-        <span aria-hidden="true">Wed</span>
-      </th>
-      <th class="dayName">
-        <span class="screen-reader-text">Thursday</span>
-        <span aria-hidden="true">Thurs</span>
-      </th>
-      <th class="dayName">
-        <span class="screen-reader-text">Friday</span>
-        <span aria-hidden="true">Fri</span>
-      </th>
-      <th class="dayName">
-        <span class="screen-reader-text">Saturday</span>
-        <span aria-hidden="true">Sat</span>
-      </th>
-    </tr>
+      <tr>
+        <th class="dayName">
+          <span class="screen-reader-text">Sunday</span>
+          <span aria-hidden="true">Sun</span>
+        </th>
+        <th class="dayName">
+          <span class="screen-reader-text">Monday</span>
+          <span aria-hidden="true">Mon</span>
+        </th>
+        <th class="dayName">
+          <span class="screen-reader-text">Tuesday</span>
+          <span aria-hidden="true">Tue</span>
+        </th>
+        <th class="dayName">
+          <span class="screen-reader-text">Wednesday</span>
+          <span aria-hidden="true">Wed</span>
+        </th>
+        <th class="dayName">
+          <span class="screen-reader-text">Thursday</span>
+          <span aria-hidden="true">Thurs</span>
+        </th>
+        <th class="dayName">
+          <span class="screen-reader-text">Friday</span>
+          <span aria-hidden="true">Fri</span>
+        </th>
+        <th class="dayName">
+          <span class="screen-reader-text">Saturday</span>
+          <span aria-hidden="true">Sat</span>
+        </th>
+      </tr>
     </thead>
     <tbody>
-    <tr v-for="(week, weekI) in weekArr" :key="weekI" @keydown="arrowKeyHandler($event)">
-      <td v-for="(day, dayI) in week"
+      <tr v-for="(week, weekI) in weekArr" :key="weekI" @keydown="arrowKeyHandler($event)">
+        <td
+          v-for="(day, dayI) in week"
           :key="dayI"
           class="dayBox"
           :class="{hasBorder: day.toUse}"
@@ -42,8 +43,9 @@
           :isSelected="isSelected = sameMonthAsSelected && day.number === selectedDay"
           :aria-hidden="!day.toUse"
           :aria-selected="isSelected"
-          v-bind="isCurrDay ? {'aria-current': 'date'} : {}">
-        <button
+          v-bind="isCurrDay ? {'aria-current': 'date'} : {}"
+        >
+          <button
             @click="openDay(day.number)"
             v-if="day.toUse"
             class="day"
@@ -51,26 +53,26 @@
             :data-dayofweek="dayI"
             :data-week="weekI"
             :class="{currentDay: isCurrDay, selectedDay: isSelected}"
-        >
-          <span class="screen-reader-text">{{ day.label }}</span>
-          <span aria-hidden="true">{{ day.number }}</span>
-        </button>
-      </td>
-    </tr>
+          >
+            <span class="screen-reader-text">{{ day.label }}</span>
+            <span aria-hidden="true">{{ day.number }}</span>
+          </button>
+        </td>
+      </tr>
     </tbody>
   </table>
 </template>
 
 <script>
-import {getRouteDate} from "@/compositions/routeDate";
+import { getRouteDate } from "@/compositions/routeDate";
 
 export default {
   name: "Month",
   props: ["currentMonth"],
-  emits: ['upmonth', 'downmonth', 'upyear', 'downyear'],
+  emits: ["upmonth", "downmonth", "upyear", "downyear"],
   setup() {
-    const {d, selectedDate} = getRouteDate();
-    return {selectedDay: d, selectedDate};
+    const { d, selectedDate } = getRouteDate();
+    return { selectedDay: d, selectedDate };
   },
   data() {
     return {
@@ -91,75 +93,87 @@ export default {
       if (!dayNum) return;
       let offset = 0;
       switch (event.code) {
-        case 'ArrowUp': {
+        case "ArrowUp": {
           offset = -7;
           break;
         }
-        case 'ArrowDown': {
+        case "ArrowDown": {
           offset = 7;
           break;
         }
-        case 'ArrowLeft': {
+        case "ArrowLeft": {
           offset = -1;
           break;
         }
-        case 'ArrowRight': {
+        case "ArrowRight": {
           offset = 1;
           break;
         }
-        case 'PageUp': {
+        case "PageUp": {
           if (event.shiftKey) {
-            this.$emit('upyear')
+            this.$emit("upyear");
             break;
           }
-          this.$emit('upmonth')
+          this.$emit("upmonth");
           break;
         }
-        case 'PageDown': {
+        case "PageDown": {
           if (event.shiftKey) {
-            this.$emit('downyear')
+            this.$emit("downyear");
             break;
           }
-          this.$emit('downmonth')
+          this.$emit("downmonth");
           break;
         }
-        case 'Home': {
-          const weekNum = currEl.dataset.week
-          const newEl = document.querySelector(`[data-week="${weekNum}"][data-dayofweek="0"]`);
+        case "Home": {
+          const weekNum = currEl.dataset.week;
+          const newEl = document.querySelector(
+            `[data-week="${weekNum}"][data-dayofweek="0"]`
+          );
           if (!newEl) return;
           newEl.focus();
           return;
         }
-        case 'End': {
-          const weekNum = currEl.dataset.week
-          const newEl = document.querySelector(`[data-week="${weekNum}"][data-dayofweek="6"]`);
+        case "End": {
+          const weekNum = currEl.dataset.week;
+          const newEl = document.querySelector(
+            `[data-week="${weekNum}"][data-dayofweek="6"]`
+          );
           if (!newEl) return;
           newEl.focus();
           return;
-       }
+        }
         default:
           return;
       }
       // Allow time for new month or new year to render
       this.$nextTick(() => {
-        const newEl = document.querySelector(`[data-daynum="${Number(dayNum) + offset}"]`)
+        const newEl = document.querySelector(
+          `[data-daynum="${Number(dayNum) + offset}"]`
+        );
         if (!newEl) return;
         newEl.focus();
       });
     },
   },
   computed: {
+    previousMonth() {
+      return this.currentMonth.clone().subtract(1, "month");
+    },
+    nextMonth() {
+      return this.currentMonth.clone().add(1, "month");
+    },
     sameMonthAsToday() {
       return (
-          this.currentMonth.year() === this.todaysDate.getFullYear() &&
-          this.currentMonth.month() === this.todaysDate.getMonth()
+        this.currentMonth.year() === this.todaysDate.getFullYear() &&
+        this.currentMonth.month() === this.todaysDate.getMonth()
       );
     },
     sameMonthAsSelected() {
       if (!this.selectedDate) return false;
       return (
-          this.currentMonth.year() === this.selectedDate.getFullYear() &&
-          this.currentMonth.month() === this.selectedDate.getMonth()
+        this.currentMonth.year() === this.selectedDate.getFullYear() &&
+        this.currentMonth.month() === this.selectedDate.getMonth()
       );
     },
     currentDay() {
@@ -169,29 +183,51 @@ export default {
       return this.currentMonth.get("day") - 1; // Indexes at 1
     },
     weekArr() {
-      const lastDateNum = this.currentMonth.daysInMonth()
+      const lastDateNum = this.currentMonth.daysInMonth();
+      const [monthName, year] = this.currentMonth
+        .format("MMMM YYYY")
+        .split(" ");
+      const getDayStr = (day) => `${monthName} ${day}, ${year}`;
 
-      const [monthName, year] = this.currentMonth.format('MMMM YYYY').split(' ');
+      const lastMonthLastDateNum = this.previousMonth.daysInMonth();
+      const [lastMonthName, lastMonthYear] = this.previousMonth
+        .format("MMMM YYYY")
+        .split(" ");
+      const getPrevStr = (day) => `${lastMonthName} ${day}, ${lastMonthYear}`;
 
-      const getDayStr = day => `${monthName} ${day}, ${year}`;
 
-      const daysArr = Array.from({length: this.weeksToRender}, (_, weekI) => {
-        return Array.from({length: 7}, (_, dayI) => {
-          const dayIndex = (weekI * 7) + dayI;
+      const [nextMonthName, nextMonthYear] = this.nextMonth
+        .format("MMMM YYYY")
+        .split(" ");
+      const getNextStr = (day) => `${nextMonthName} ${day}, ${nextMonthYear}`;
+
+      const daysArr = Array.from({ length: this.weeksToRender }, (_, weekI) => {
+        return Array.from({ length: 7 }, (_, dayI) => {
+          const dayIndex = weekI * 7 + dayI;
           const dateNum = dayIndex - this.startDayOfWeek;
-          if (dateNum <= 0 || dateNum > lastDateNum) return {
-            toUse: false,
-            label: '',
-            number: 0,
-          };
-          const str = getDayStr(dateNum);
+          if (dateNum <= 0) {
+            const newDateNum = dateNum + lastMonthLastDateNum;
+            return {
+              toUse: true,
+              label: getPrevStr(newDateNum),
+              number: newDateNum,
+            };
+          }
+          if (dateNum > lastDateNum) {
+            const newDateNum = dateNum - lastDateNum;
+            return {
+              toUse: true,
+              label: getNextStr(newDateNum),
+              number: newDateNum,
+            };
+          }
           return {
             toUse: true,
-            label: str,
-            number: dateNum
-          }
-        })
-      })
+            label: getDayStr(dateNum),
+            number: dateNum,
+          };
+        });
+      });
       return daysArr;
     },
   },
