@@ -5,13 +5,13 @@
       <h1 class="monthName">{{ displayMonth }}</h1>
       <div class="monthControllers">
         <button @click="setToToday()" class="btnBase todayBtn">Today</button>
-        <div class="prevNextButtons btnBase">
-          <button @click="subMonth()" class="prevButton noButton">
+        <div class="prevNextButtons noHover btnBase">
+          <button @click="subMonth()" class="prevButton btnBaseHover noButton">
             <Arrow></Arrow>
             <span class="screen-reader-text">Previous Month</span>
           </button>
           <div class="btnDivider"></div>
-          <button @click="addMonth()" class="noButton">
+          <button @click="addMonth()" class="btnBaseHover noButton">
             <Arrow></Arrow>
             <span class="screen-reader-text">Next Month</span>
           </button>
@@ -135,11 +135,6 @@ export default {
   color: #008A73;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.noButton {
-  background: none;
-  border: none;
 }
 
 .prevNextButtons {

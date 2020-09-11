@@ -313,6 +313,7 @@ export default {
 
   max-width: 3.5rem;
   max-height: 3.5rem;
+  transition: 100ms background ease-in-out, 100ms color ease-in-out; 
 }
 
 .dayContain > span {

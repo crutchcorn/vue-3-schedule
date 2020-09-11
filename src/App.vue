@@ -50,4 +50,17 @@ body {
   background: #FFFFFF;
   cursor: pointer;
 }
+
+.btnBaseHover, .btnBase {
+  transition: 150ms background ease-in-out;
+}
+
+.btnBase:not(.noHover):hover, .btnBaseHover:hover {
+  background: rgba(0, 128, 106, 0.12);
+}
+
+.noButton {
+  background: none;
+  border: none;
+}
 </style>
