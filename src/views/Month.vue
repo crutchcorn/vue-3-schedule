@@ -1,7 +1,7 @@
 <template>
-  <h1>{{ displayMonth }}</h1>
   <div class="container">
     <div class="beegContain">
+      <h1>{{ displayMonth }}</h1>
       <div class="monthControllers">
         <button @click="setToToday()">Today</button>
         <button @click="subMonth()">Up</button>
@@ -68,19 +68,28 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  width: 100%;
   max-width: 960px;
   margin: 0 auto;
-}
-
-.monthControllers {
-  display: flex;
-  justify-content: flex-end;
+  overflow: hidden;
+  min-height: 100%;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 
 .beegContain {
   flex-shrink: 1;
   width: 600px;
   flex-grow: 1;
+  /* To hide the box shadow when flex wrap */
+  margin-left: -2px;
+  margin-right: -2px;
+  box-shadow: 1px 0px 0px rgba(0, 128, 106, 0.32), 0px 1px 0px rgba(0, 128, 106, 0.32);
+}
+
+.monthControllers {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .scheduleView {
