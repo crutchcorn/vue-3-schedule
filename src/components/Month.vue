@@ -54,8 +54,10 @@
             :data-week="!day.diffMonth ? weekI : -1"
             :class="{currentDay: isCurrDay, selectedDay: isSelected}"
           >
+          <span class="dayContain">
             <span class="screen-reader-text">{{ day.label }}</span>
             <span aria-hidden="true">{{ day.number }}</span>
+            </span>
           </button>
         </td>
       </tr>
@@ -282,38 +284,52 @@ export default {
   padding-top: 100%;
 }
 
-.dayBox:not(.diffMonth) > .day {
+.dayBox:not(.diffMonth) .dayContain {
   color: #008a73;
 }
 
 .day {
   position: absolute;
-  right: 0;
-  bottom: 0;
   left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0;
   background: none;
   border: none;
   margin: 0 auto;
-  border-radius: 50%;
-
+  font-weight: 600;
   height: 100%;
   width: 100%;
+}
+
+.dayContain {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  height: 100%;
+  width: 100%;
+  
+  border-radius: 50%;
 
   max-width: 3.5rem;
   max-height: 3.5rem;
 }
 
-.currentDay {
+.dayContain > span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+
+.currentDay .dayContain {
   border: 4px solid #008a73;
 }
 
-.dayBox:hover .day {
+.dayBox:hover .dayContain {
   background: rgba(0, 128, 106, 0.12);
 }
 
-.dayBox:not(.diffMonth) > .day.selectedDay {
+.dayBox:not(.diffMonth) .selectedDay .dayContain {
   background: #008a73;
   color: white;
 }
