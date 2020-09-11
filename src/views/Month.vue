@@ -3,32 +3,43 @@
     <div class="beegContain">
       <h1>{{ displayMonth }}</h1>
       <div class="monthControllers">
-        <button @click="setToToday()">Today</button>
-        <button @click="subMonth()">Up</button>
-        <button @click="addMonth()">Down</button>
+        <button @click="setToToday()" class="btnBase">Today</button>
+        <div class="prevNextButtons btnBase">
+          <button @click="subMonth()" class="prevButton noButton">
+            <Arrow></Arrow>
+            <span class="screen-reader-text">Previous Month</span>
+          </button>
+          <div class="btnDivider"></div>
+          <button @click="addMonth()" class="noButton">
+            <Arrow></Arrow>
+            <span class="screen-reader-text">Next Month</span>
+          </button>
+        </div>
       </div>
       <Month
-          :currentMonth="currentMonth"
-          @upmonth="addMonth()"
-          @downmonth="subMonth()"
-          @upyear="addYear()"
-          @downyear="subYear()"
+        :currentMonth="currentMonth"
+        @upmonth="addMonth()"
+        @downmonth="subMonth()"
+        @upyear="addYear()"
+        @downyear="subYear()"
       />
     </div>
     <div class="scheduleView">
-    <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
 import Month from "../components/Month.vue";
+import Arrow from "../components/Arrow.vue";
 import dayjs from "dayjs";
 
 export default {
   name: "MonthView",
   components: {
     Month,
+    Arrow,
   },
   data() {
     return {
@@ -38,26 +49,26 @@ export default {
   },
   computed: {
     displayMonth() {
-      return this.currentMonth.format('MMMM, YYYY');
-    }
+      return this.currentMonth.format("MMMM, YYYY");
+    },
   },
   methods: {
     setToToday() {
       this.currentMonth = this.initialMonth.clone();
     },
     subMonth() {
-      this.currentMonth = this.currentMonth.subtract(1, 'month');
+      this.currentMonth = this.currentMonth.subtract(1, "month");
     },
     addMonth() {
-      this.currentMonth = this.currentMonth.add(1, 'month');
+      this.currentMonth = this.currentMonth.add(1, "month");
     },
     subYear() {
-      this.currentMonth = this.currentMonth.subtract(1, 'year');
+      this.currentMonth = this.currentMonth.subtract(1, "year");
     },
     addYear() {
-      this.currentMonth = this.currentMonth.add(1, 'year');
-    }
-  }
+      this.currentMonth = this.currentMonth.add(1, "year");
+    },
+  },
 };
 </script>
 
@@ -84,7 +95,8 @@ export default {
   /* To hide the box shadow when flex wrap */
   margin-left: -2px;
   margin-right: -2px;
-  box-shadow: 1px 0px 0px rgba(0, 128, 106, 0.32), 0px 1px 0px rgba(0, 128, 106, 0.32);
+  box-shadow: 1px 0px 0px rgba(0, 128, 106, 0.32),
+    0px 1px 0px rgba(0, 128, 106, 0.32);
 }
 
 .monthControllers {
@@ -95,5 +107,38 @@ export default {
 .scheduleView {
   flex-grow: 1;
   min-width: 300px;
+}
+
+.prevButton svg {
+  transform: rotate(180deg);
+}
+
+.noButton {
+  background: none;
+  border: none;
+}
+
+.prevNextButtons {
+  margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btnDivider {
+  width: 1px;
+  height: calc(100% - 24px);
+  margin-top: 16px;
+  margin-bottom: 16px;
+  background: rgba(0, 128, 106, 0.32);
+  display: inline-block;
+}
+
+.prevNextButtons button {
+  cursor: pointer;
+  padding: 8px;
+}
+
+.prevNextButtons button svg {
+  color: #008A73
 }
 </style>

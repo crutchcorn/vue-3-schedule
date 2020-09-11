@@ -3,7 +3,8 @@
 </template>
 
 <style>
-html, body {
+html,
+body {
   min-height: 100% !important;
   height: 100%;
 }
@@ -40,5 +41,14 @@ body {
   position: absolute;
   width: 1px;
   word-wrap: normal !important;
+}
+
+.btnBase {
+  border: 1px solid rgba(0, 128, 106, 0.32);
+  box-sizing: border-box;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 8px;
+  background: #FFFFFF;
+  cursor: pointer;
 }
 </style>

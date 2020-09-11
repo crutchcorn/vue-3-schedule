@@ -266,6 +266,7 @@ export default {
   padding-top: 24px;
   padding-bottom: 24px;
   margin-bottom: 1rem;
+  font-weight: bold;
 }
 
 .dayBox {
