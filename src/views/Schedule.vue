@@ -94,11 +94,13 @@ export default {
 .eventList {
   margin-top: 24px;
   list-style: none;
+  position: relative;
 }
 
-.eventList:empty::before {
+.eventList:empty::after {
   padding-left: 16px;
-  content: 'No items in the list'
+  content: 'No items in the list';
+  position: absolute;
 }
 
 .eventList li {
