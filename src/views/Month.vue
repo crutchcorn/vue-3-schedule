@@ -1,9 +1,10 @@
 <template>
   <div class="container">
     <div class="beegContain">
-      <h1>{{ displayMonth }}</h1>
+      <div class="topContain">
+      <h1 class="monthName">{{ displayMonth }}</h1>
       <div class="monthControllers">
-        <button @click="setToToday()" class="btnBase">Today</button>
+        <button @click="setToToday()" class="btnBase todayBtn">Today</button>
         <div class="prevNextButtons btnBase">
           <button @click="subMonth()" class="prevButton noButton">
             <Arrow></Arrow>
@@ -14,6 +15,7 @@
             <Arrow></Arrow>
             <span class="screen-reader-text">Next Month</span>
           </button>
+        </div>
         </div>
       </div>
       <Month
@@ -99,8 +101,27 @@ export default {
     0px 1px 0px rgba(0, 128, 106, 0.32);
 }
 
-.monthControllers {
+.topContain {
   display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-bottom: 16px;
+  max-width: 600px;
+  margin: 72px auto 0;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.monthName {
+  font-weight: 800;
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.monthControllers {
+  margin-left: auto;
+  display: flex;
+  height: fit-content;
   justify-content: flex-end;
 }
 
@@ -109,8 +130,11 @@ export default {
   min-width: 300px;
 }
 
-.prevButton svg {
-  transform: rotate(180deg);
+.todayBtn {
+  font-weight: 600;
+  color: #008A73;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .noButton {
@@ -122,6 +146,10 @@ export default {
   margin-left: 4px;
   display: inline-flex;
   align-items: center;
+}
+
+.prevButton svg {
+  transform: rotate(180deg);
 }
 
 .btnDivider {
