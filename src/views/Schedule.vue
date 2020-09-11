@@ -89,6 +89,8 @@ export default {
 .eventBtn {
   padding: 16px 20px;
   height: fit-content;
+  color: #008A73;
+  font-weight: 600;
 }
 
 .eventList {
