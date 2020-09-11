@@ -82,7 +82,7 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 960px;
+  max-width: 1440px;
   margin: 0 auto;
   overflow: hidden;
   min-height: 100%;

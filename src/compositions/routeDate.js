@@ -1,4 +1,5 @@
 import router from "@/router";
+import dayjs from "dayjs";
 
 import { computed } from "vue";
 
@@ -14,7 +15,7 @@ export function getRouteDate() {
   });
 
   const dateToString = computed(
-    () => selectedDate.value && selectedDate.value.toDateString()
+    () => selectedDate.value && dayjs(selectedDate.value).format("dddd, MMM D")
   );
 
   const m = computed(() => selectedDate.value && selectedDate.value.getMonth());
