@@ -165,8 +165,10 @@ export default {
       }
       // Allow time for new month or new year to render
       this.$nextTick(() => {
+        const dayToFocus = Number(dayNum) + offset;
+        if (dayToFocus < 0) return;
         const newEl = document.querySelector(
-          `[data-daynum="${Number(dayNum) + offset}"]`
+          `[data-daynum="${dayToFocus}"]`
         );
         if (!newEl) return;
         newEl.focus();
