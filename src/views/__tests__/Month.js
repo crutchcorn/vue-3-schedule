@@ -71,3 +71,32 @@ test('show day from next month', async () => {
     expect(getByText('November 7, 2020')).toBeInTheDocument();
     cleanup();
 })
+
+test.skip('clicking on day from next month should navigate', async () => {
+    const {getByText, fireEvent, cleanup} = render(Month);
+    const el = getByText('November 7, 2020');
+    // Throws an error:
+    // Cannot read property 'push' of undefined
+    fireEvent.click(el);
+    await waitFor(() => expect(getByText('November 2020')).toBeInTheDocument());
+    cleanup();
+})
+
+/**
+ ● i get the same error as above, even when using the official library
+
+ TypeError: Cannot read property 'push' of undefined
+
+ 36 |       <tr v-for="(week, weekI) in weekArr" :key="weekI" @keydown="arrowKeyHandler($event)">
+ 37 |         <td
+ > 38 |           v-for="(day, dayI) in week"
+ | ^
+ 39 |           :key="dayI"
+ 40 |           class="dayBox"
+ 41 |           :class="{diffMonth: day.diffMonth}"
+ */
+test.skip('i get the same error as above, even when using the official library', async () => {
+    const {wrapper, cleanup} = render(Month);
+    wrapper.find('[data-diffmonth="next"]').trigger('click');
+    cleanup();
+})

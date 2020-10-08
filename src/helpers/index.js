@@ -43,7 +43,8 @@ export const render = (comp) => {
         ...getQueriesForElement(document.body),
         debug: (el = baseElement) => logDOM(el),
         cleanup,
-        fireEvent
+        fireEvent,
+        wrapper
     };
 }
 
