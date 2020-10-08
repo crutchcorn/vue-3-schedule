@@ -17,7 +17,6 @@
   "devDependencies": {
     "@testing-library/dom": "^7.24.5",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/user-event": "^12.1.7",
     "@vue/cli-plugin-babel": "~4.5.7",
     "@vue/cli-plugin-eslint": "~4.5.7",
     "@vue/cli-plugin-router": "~4.5.7",

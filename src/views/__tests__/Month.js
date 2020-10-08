@@ -1,7 +1,6 @@
 import {render, waitFor} from '@/helpers';
 import Month from '../Month.vue'
 import { advanceTo } from 'jest-date-mock';
-import userEvent from '@testing-library/user-event'
 
 beforeAll(() => {
     advanceTo(new Date(2020, 9, 1, 0, 0, 0));
@@ -105,11 +104,9 @@ test.skip('i get the same error as above, even when using the official library',
 test('page up should navigate to the next month', async () => {
     const {getByText, fireEvent, cleanup} = render(Month);
     // This test is very unorthodox. I would typically use "getByText" and keydown on that
-    // But for whatever reason, I am not able to get those tests to work, likely due to a focus bug
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
+    // However, fireEvent.focus does not change the active element, so we need to manually call "focus"
+    const el = document.querySelector('[data-dayNum="1"]')
+    el.focus();
     expect(document.activeElement.innerHTML).toContain('October 1, 2020')
 
     fireEvent.keyDown(document.activeElement, {code: 'PageUp'})
@@ -119,12 +116,8 @@ test('page up should navigate to the next month', async () => {
 
 test('shift page up should navigate to the next year', async () => {
     const {getByText, fireEvent, cleanup} = render(Month);
-    // This test is very unorthodox. I would typically use "getByText" and keydown on that
-    // But for whatever reason, I am not able to get those tests to work, likely due to a focus bug
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
+    const el = document.querySelector('[data-dayNum="1"]')
+    el.focus();
     expect(document.activeElement.innerHTML).toContain('October 1, 2020')
 
     fireEvent.keyDown(document.activeElement, {code: 'PageUp', shiftKey: true})
@@ -134,13 +127,8 @@ test('shift page up should navigate to the next year', async () => {
 
 test('page down should navigate to the previous month', async () => {
     const {getByText, fireEvent, cleanup} = render(Month);
-    // This test is very unorthodox. I would typically use "getByText" and keydown on that
-    // But because we're using `activeElement` in our code, we need to manually tab to that day
-    // fireEvent.focus() does not do this for us
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
+    const el = document.querySelector('[data-dayNum="1"]')
+    el.focus();
     expect(document.activeElement.innerHTML).toContain('October 1, 2020')
 
     fireEvent.keyDown(document.activeElement, {code: 'PageDown'})
@@ -151,12 +139,8 @@ test('page down should navigate to the previous month', async () => {
 
 test('shift page down should navigate to the previous year', async () => {
     const {getByText, fireEvent, cleanup} = render(Month);
-    // This test is very unorthodox. I would typically use "getByText" and keydown on that
-    // But for whatever reason, I am not able to get those tests to work, likely due to a focus bug
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
+    const el = document.querySelector('[data-dayNum="1"]')
+    el.focus();
     expect(document.activeElement.innerHTML).toContain('October 1, 2020')
 
     fireEvent.keyDown(document.activeElement, {code: 'PageDown', shiftKey: true})
@@ -167,10 +151,8 @@ test('shift page down should navigate to the previous year', async () => {
 
 test('up and down arrows should navigate by week', async () => {
     const {fireEvent, cleanup} = render(Month);
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
+    const el = document.querySelector('[data-dayNum="1"]')
+    el.focus();
     expect(document.activeElement.innerHTML).toContain('October 1, 2020')
 
     fireEvent.keyDown(document.activeElement, {code: 'ArrowDown'})
@@ -182,10 +164,8 @@ test('up and down arrows should navigate by week', async () => {
 
 test('left and right arrows should navigate by day', async () => {
     const {fireEvent, cleanup} = render(Month);
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
-    userEvent.tab();
+    const el = document.querySelector('[data-dayNum="1"]')
+    el.focus();
     expect(document.activeElement.innerHTML).toContain('October 1, 2020')
 
     fireEvent.keyDown(document.activeElement, {code: 'ArrowRight'})
