@@ -32,8 +32,8 @@
         </th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="(week, weekI) in weekArr" :key="weekI" @keydown="arrowKeyHandler($event)">
+    <tbody @keydown="arrowKeyHandler($event)">
+      <tr v-for="(week, weekI) in weekArr" :key="weekI">
         <td
           v-for="(day, dayI) in week"
           :key="dayI"
