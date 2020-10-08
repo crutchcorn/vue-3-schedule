@@ -174,3 +174,18 @@ test('left and right arrows should navigate by day', async () => {
     await waitFor(() => expect(document.activeElement.innerHTML).toContain('October 1, 2020'));
     cleanup();
 })
+
+
+test('home and end arrows should navigate by week days', async () => {
+    const {fireEvent, cleanup} = render(Month);
+    // October 4th is a Sunday. 10th is Saturday
+    const el = document.querySelector('[data-dayNum="4"]')
+    el.focus();
+    expect(document.activeElement.innerHTML).toContain('October 4, 2020')
+
+    fireEvent.keyDown(document.activeElement, {code: 'End'})
+    await waitFor(() => expect(document.activeElement.innerHTML).toContain('October 10, 2020'))
+    fireEvent.keyDown(document.activeElement, {code: 'Home'})
+    await waitFor(() => expect(document.activeElement.innerHTML).toContain('October 4, 2020'));
+    cleanup();
+})
