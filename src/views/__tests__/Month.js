@@ -47,3 +47,27 @@ test('today button should jump to today from past date', async () => {
     await waitFor(() => expect(getByText('October, 2020')).toBeInTheDocument());
     cleanup();
 })
+
+test('show proper first day of the month', async () => {
+    const {getByText, cleanup} = render(Month);
+    expect(getByText('October 1, 2020')).toBeInTheDocument();
+    cleanup();
+})
+
+test('show proper last day of month', async () => {
+    const {getByText, cleanup} = render(Month);
+    expect(getByText('October 31, 2020')).toBeInTheDocument();
+    cleanup();
+})
+
+test('show day from previous month', async () => {
+    const {getByText, cleanup} = render(Month);
+    expect(getByText('September 27, 2020')).toBeInTheDocument();
+    cleanup();
+})
+
+test('show day from next month', async () => {
+    const {getByText, cleanup} = render(Month);
+    expect(getByText('November 7, 2020')).toBeInTheDocument();
+    cleanup();
+})
