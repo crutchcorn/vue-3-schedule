@@ -3,5 +3,6 @@ module.exports = {
   transform: {
     '^.+\\.vue$': 'vue-jest'
   },
+  setupFiles: ['jest-date-mock'],
   setupFilesAfterEnv: ['./jest.setup.js']
 }
