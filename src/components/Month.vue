@@ -32,8 +32,8 @@
         </th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="(week, weekI) in weekArr" :key="weekI" @keydown="arrowKeyHandler($event)">
+    <tbody @keydown="arrowKeyHandler($event)">
+      <tr v-for="(week, weekI) in weekArr" :key="weekI">
         <td
           v-for="(day, dayI) in week"
           :key="dayI"
@@ -52,6 +52,7 @@
             :data-daynum="!day.diffMonth ? day.number : -1"
             :data-dayofweek="!day.diffMonth ? dayI : -1"
             :data-week="!day.diffMonth ? weekI : -1"
+            :data-diffmonth="day.diffMonth || 'current'"
             :class="{currentDay: isCurrDay, selectedDay: isSelected}"
           >
           <span class="dayContain">
@@ -310,12 +311,12 @@ export default {
   transform: translateY(-50%) translateX(-50%);
   height: 100%;
   width: 100%;
-  
+
   border-radius: 50%;
 
   max-width: 3.5rem;
   max-height: 3.5rem;
-  transition: 100ms background ease-in-out, 100ms color ease-in-out; 
+  transition: 100ms background ease-in-out, 100ms color ease-in-out;
 }
 
 .dayContain > span {
